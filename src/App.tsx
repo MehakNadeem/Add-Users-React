@@ -2,7 +2,8 @@ import React from 'react';
 import AddUser from './components/AddUser';
 import ListUsers from './components/ListUsers';
 
-export default function App() {
+const App: React.FC = () => {
+
   return (
     <div className='container d-flex justify-content-center align-items-center'>
       <div className='row'>
@@ -12,3 +13,5 @@ export default function App() {
     </div>
   );
 }
+
+export default App;

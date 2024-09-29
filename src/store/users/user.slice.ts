@@ -1,25 +1,13 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { SortingState, User } from '../../models/data';
 
-export interface User{
-  id: number;
-  name: string;
-  email: string;
-}
-
-interface SortingState{
-  isAscendingID: boolean;
-  isAscendingName: boolean;
-}
-
-interface UserState{
-  user: User;
+export interface UserState{
   users: User[];
   nextId: number;
   sorting: SortingState;
 }
 
 const initialState: UserState = {
-  user: { id: 1, name: '', email: '' },
   users: [],
   nextId: 1,
   sorting: { 
@@ -29,7 +17,7 @@ const initialState: UserState = {
 }
 
 export const userSlice = createSlice({
-  name: 'user',
+  name: 'userSlice',
   initialState,
   reducers: {
     createUser: (state, {payload}) => {
@@ -39,17 +27,6 @@ export const userSlice = createSlice({
       }
       state.users.push(newUser);
       state.nextId++;
-    },
-
-    handleChange: (state, {payload}) => {
-      state.user= {
-        ...state.user,
-        [payload.name]: payload.value
-      }
-    },
-
-    clearForm: (state) => {
-      state.user = { id: state.nextId, name: '', email: '' };
     },
 
     toggleSortDirection: (state, {payload}) => {
@@ -68,5 +45,4 @@ export const userSlice = createSlice({
 });
 
 export default userSlice.reducer;
-export const { handleChange, createUser, clearForm, toggleSortDirection} = userSlice.actions;
-
+export const { createUser, toggleSortDirection } = userSlice.actions;

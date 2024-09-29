@@ -1,19 +1,37 @@
-import React from "react";
+import React, { useState } from "react";
 import { RootState } from "../store";
-import { createUser, handleChange, clearForm } from "../features/userSlice";
+import { createUser } from '../store/users/user.slice';
 import { useDispatch, useSelector } from "react-redux";
 
-export default function AddUser() {
+const AddUser: React.FC = () => {
   const dispatch = useDispatch();
-  const user = useSelector((state: RootState) => state.user.user);
+
+  const [user, setUser] = useState({
+    name: "",
+    email: ""
+  });
+
+  const setUserAttributes = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
+    setUser({
+      ...user,
+      [name]: value
+    });
+  };
+
+  const handleFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    dispatch(createUser(user));
+    setUser({
+      name: "",
+      email: ""
+    });
+  }
+  
   return (
     <div className="container m-5">
       <form
-        onSubmit={(event) => {
-          event.preventDefault();
-          dispatch(createUser(user));
-          dispatch(clearForm());
-        }}
+        onSubmit={handleFormSubmit}
         >
         <label className="mt-2">Name: </label>
         <input className="form-control mt-2 mb-2"
@@ -21,12 +39,7 @@ export default function AddUser() {
                value={user.name}
                placeholder="Name"
                name="name"
-               onChange={(event) => {
-                  dispatch(handleChange({
-                    name: event.target.name,
-                    value: event.target.value
-                  }))
-                }}
+               onChange={setUserAttributes}
           required
         />
         <label>Email: </label>
@@ -35,12 +48,7 @@ export default function AddUser() {
                value={user.email}
                placeholder="Email"
                name="email"
-               onChange={(event) => {
-                  dispatch(handleChange({
-                    name: event.target.name,
-                    value: event.target.value
-                  }))
-                }}
+               onChange={setUserAttributes}
           required
         />
         <button type="submit" className="btn btn-primary mt-3 w-25">Add User</button>
@@ -48,3 +56,5 @@ export default function AddUser() {
     </div>
   );
 }
+
+export default AddUser;
